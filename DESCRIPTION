@@ -1,0 +1,23 @@
+Package: unPC
+Type: Package
+Title: unbundled PCA (unPC) uses PCA results and geographic sampling locations to generate inferences of migration across the landscape using genetic data
+Version: 0.1.0
+Author: person("Geoffrey", "House", email = "glhouse@indiana.edu", role = c("aut", "cre"))
+Maintainer: Geoffrey House <glhouse@indiana.edu>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports:
+ plyr,
+ abind,
+ ggplot2,
+ shape
+Suggests:
+  PBSmapping,
+  RColorBrewer,
+    knitr,
+    rmarkdown
+RoxygenNote: 6.0.1
+VignetteBuilder: knitr
