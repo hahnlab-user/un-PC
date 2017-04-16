@@ -1,0 +1,33 @@
+---
+title: "unPC_tutorial"
+author: "Geoffrey House"
+date: "April 16, 2017"
+output: html_document
+---
+
+Let's see how to make a simple un-PC output, and we'll work through the details of the different options a little later.
+
+We'll start by making aggregate plots using the 10 PCA output files found in the exampleData directory. 
+Each of these output files is the PCA results for a different iteration of the *ms* simulation using the migration barrier scenario. These aggregate plots are then made by averaging the *un-PC* value for each population pair across the 10 iterations to get the aggregated *un-PC* value for that population pair, which is then plotted.
+
+```{r, fig.width=4, fig.height=4, echo = TRUE, results='hide'}
+unPC::unPC(inputToProcess = "~/Box Sync/R_code/unPC/exampleData", geogrCoords = "~/Box Sync/R_code/unPC/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "~/Box Sync/R_code/unPC/exampleData/populationCoordinates_NOT_DCTTransformed.txt", populationPointNormalization = 10, savePlotsToPdf = FALSE)
+```
+
+On the left is the plot with the most differentiated ellipses (population pairs with the highest *un-PC* scores) on top, and on the right is the plot with the least differentiated ellipses (population pairs with the lowest *un-PC* scores) on top. 
+
+If we want to change the color scheme, that is easy to do by supplying any valid RColorBrewer color scheme (for a list of valid color schemes type ```RColorBrewer::brewer.pal.info```.) Let's change it to the "RdYlBu" color scheme:
+
+```{r, fig.width=4, fig.height=4, echo = TRUE, results='hide'}
+unPC::unPC(inputToProcess = "~/Box Sync/R_code/unPC/exampleData", geogrCoords = "~/Box Sync/R_code/unPC/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "~/Box Sync/R_code/unPC/exampleData/populationCoordinates_NOT_DCTTransformed.txt", populationPointNormalization = 10, colorBrewerPalette = "RdYlBu", savePlotsToPdf = FALSE)
+```
+
+Notice that the plots are identical, but now the most differentiated ellipses are now dark orange instead of dark pink, and the least differentiated ellipses are now dark blue instead of dark green.
+
+
+<!-- Using the ```runAggregated = FALSE``` option, we can also generate a separate set of plots for each PCA output file (representing the results from each different iteration of the *ms* simulation separately): -->
+
+<!-- ```{r, fig.width=3, fig.height=3, echo = TRUE, results='hide'} -->
+<!-- unPC::unPC(inputToProcess = "~/Box Sync/R_code/unPC/exampleData", geogrCoords = "~/Box Sync/R_code/unPC/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "~/Box Sync/R_code/unPC/exampleData/populationCoordinates_NOT_DCTTransformed.txt", populationPointNormalization = 10, runAggregated = FALSE, savePlotsToPdf = FALSE) -->
+<!-- ``` -->
+
