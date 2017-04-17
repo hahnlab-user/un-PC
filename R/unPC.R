@@ -138,11 +138,11 @@ start.time <- Sys.time()
 # Used to get the re to use for searching against the file names (will need to update for the msLandscape output format;
 # don't worry too much about details; handled with more detail in the data import module below.)
 
-#reToUse <- glob2rx("*.evec")
+reToUse <- glob2rx("*.evec")
 #reToUse <- glob2rx("*.txt")
 
 # For POPRES, and maybe all smartPCA output
-reToUse <- glob2rx("*.eigs")
+# reToUse <- glob2rx("*.eigs")
 
 fileListOutput <- list.files(path = inputToProcess, pattern = reToUse)
 
@@ -365,7 +365,12 @@ if(isTRUE(runDataImport)){
       # Loop through the files, and process the ones that are evec files (end with "tabDelimForRPlotting-evec.txt" or any other
       # string ending defined below).
 
-      fileSuffixToSearch <- "tabDelimForRPlotting-evec.txt"
+      # This is the original file suffix to search
+      #fileSuffixToSearch <- "tabDelimForRPlotting-evec.txt"
+
+      # This is more general
+      fileSuffixToSearch <- ".evec"
+
       lengthFileSuffixToSearch <- nchar(fileSuffixToSearch)
 
       # This will be a named list acting like a dict in Python to store the parsed iter number (used below
@@ -376,7 +381,7 @@ if(isTRUE(runDataImport)){
       # Still need to vectorize with lapply. 8/15/16
       for(file in fileList){
 
-        #print(paste("The file name is:", file, sep = ""))
+        print(paste("The file name is:", file, sep = ""))
 
         # If the name of the current file ends with the correct file suffix for an evec file, then add its values
         # to the 3-D array of results.
@@ -384,11 +389,24 @@ if(isTRUE(runDataImport)){
         if( substr(file,(nchar(file) - lengthFileSuffixToSearch + 1),nchar(file)) == fileSuffixToSearch){
           #print("evec File")
 
-          splitFile1 <- strsplit(file, "-")
+          # This is the original parsing.
+          #splitFile1 <- strsplit(file, "-")
+
+          # This is more general
+          splitFile1 <- strsplit(file, "_")
 
           # Indexing into the split file name string (split with both '-' and '_' to get the iteration number). This
           # makes it flexible to get the iter num regardless of how many digits it has.
-          iterNum <- strsplit(splitFile1[[1]][2], "-")[[1]][1]
+
+          # This is the original parsing
+          #iterNum <- strsplit(splitFile1[[1]][2], "-")[[1]][1]
+
+          # This is more general - splits on the file extension (and assumes the iteration
+          # number in the file name follows format XXX_XXXX_##.XXX where ## is the iteration number
+          # and occurs immediately before the file extension (regardless of how many "_" characters
+          # occur in the file name). "." has to be escaped.
+          splitFile2 <- strsplit(splitFile1[[1]][length(splitFile1[[1]])], "\\.")
+          iterNum <- splitFile2[[1]][1]
 
           # This evaluates the value of iterNum and puts it as a name in the list (this named list is functioning like a Python dict)
           screenedFileList[[iterNum]] <- file
