@@ -14,7 +14,8 @@
 #' If the input PCA results are not from msLandscape, then the geogrCoords need to be the coordinates for each individual (i.e.
 #' the number of rows in geogrCoords must be the same as the number of rows in the input PCA data). These geogrCoords
 #' are then used to generate population labels for each individual and these reduced population-level coordinates
-#' are then used to calculate the pairwise unPC values between populations.
+#' are then used to calculate the pairwise unPC values between populations. Currently, this functionality exists only when visualizing
+#' results from a single file, not all files in a directory.
 #' @param roundEarth boolean TRUE/FALSE. TRUE uses the Haversine formula to calculate the distance between pairs of populations on a globe;
 #' FALSE uses Cartesian distance on a plane instead.
 #' @param firstPC the number of the first principal component to use in calculating the unPC values; this is used as a column index
@@ -46,7 +47,13 @@
 #' @export
 
 
-# CURRENTLY REQUIRES DEFINED FILE EXTENSION (.EIGS) FOR SEARCHING IN DIRECTORIES. MAY NEED TO RE-EVALUATE. 031717
+# CURRENTLY REQUIRES DEFINED FILE EXTENSION (.EVEC) FOR SEARCHING IN DIRECTORIES. MAY NEED TO RE-EVALUATE. 031717
+
+# If input is a single file, currently the PCA results need 1 more row than the sample coords (because 1st row is skipped as a header for results straight from smartPCA).
+# It also requires a leading column of sample identifiers (again for results from smartPCA)
+# Can get around this by putting adding a dummy header as the first row in the PCA results file and a column of dummy sample names as the first column. May re-evaluate this import method. 042017.
+
+# Need to implement a switch for mapping US states (requires the 'state' database instead of the 'world' database that is otherwise used - 'world' does not have state boundaries)? 042017
 
 # This is un-PC standardized for msLandscape.
 
@@ -342,9 +349,13 @@ if(isTRUE(runDataImport)){
       # top 10 eigenvectors to be included (since the first col in the output is dropped above.). This will replace
       # any existing column 11.
 
+      # Pad the PCAEvec with columns of zero if it has less than 11 columns. This assumes that the PCs chosen to use are not outside of the PCs
+      # that exist (as non-zero pads) in the input data (this is currently not a tested condition.)
       if (ncol(PCAEvec) < 11){
-        #NEED.
-        # Will need to pad the PCAEvec up to 11 cols
+        for( colNum in seq(ncol(PCAEvec) + 1, 11, 1)){
+          columnToAdd <- vector(mode = "numeric", length = nrow(PCAEvec))
+          PCAEvec <- cbind(PCAEvec, columnToAdd)
+        }
       }
 
       # Already checked in the 'stop' above to make sure this is safe.
@@ -487,12 +498,13 @@ if(isTRUE(runDataImport)){
         } else{
           #print(paste(num,nrow(processedPCAEvec)))
           allEvecArray <- abind::abind(allEvecArray, processedPCAEvec, along=3)
-          #print("appended.")
+          print("appended.")
         }
 
         # Read in the eigenvals. from the first row of the evec file (these are the
-        # variances explained by each eigenvect.)
-        rawEvalVec <- read.table(currFileName,sep="",nrows=1)
+        # variances explained by each eigenvect.) The comment.char = "" lets it ignore
+        # The leading '#' output by smartPCA.
+        rawEvalVec <- read.table(currFileName,sep="",nrows=1, comment.char = "")
         PCAEval <- as.matrix(rawEvalVec[-1])
 
         if(num == 1){
@@ -507,6 +519,7 @@ if(isTRUE(runDataImport)){
       # Add the row, column, and 3rd dimensional names for the 3-D array of evec values.
       dimnames(allEvecArray)[[1]] <- paste("Individual#", seq(1,nrow(allEvecArray[,,1])))
       dimnames(allEvecArray)[[2]] <- c(paste("Evec#", seq(1,10)),"Population#")
+      print(dimnames(allEvecArray)[[3]])
       dimnames(allEvecArray)[[3]] <- paste("ms Sim. Iteration#", sortedIterNumHolder)
     }
 
@@ -1342,6 +1355,9 @@ if(isTRUE(runPlotting)){
 
             mappingData <- ggplot2::map_data("world")
 
+            # For plotting with US states
+            #mappingData <- ggplot2::map_data("state")
+
             xMin <- min(unPCDataFrameForPlot$Lon)
             xMax <- max(unPCDataFrameForPlot$Lon)
 
@@ -1360,6 +1376,8 @@ if(isTRUE(runPlotting)){
             names(mappingData) <- c("X", "Y", "PID", "POS", "region", "subregion")
 
             clippedMap <- PBSmapping::clipPolys(mappingData, xlim = xlims, ylim = ylims)
+
+            print(class(clippedMap))
 
             # To get the point scaling right, need to put the size outside the aes; Now using ln(num Indivs sampled per population) for the point scaling, and it is working well.
             unPCMap <- ggplot2::ggplot(data = unPCDataFrameForPlot, ggplot2::aes(x=Longitude, y=Latitude)) +
