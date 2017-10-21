@@ -1,7 +1,7 @@
 ---
-title: "unPC_tutorial"
+title: "*unPC* tutorial"
 author: "Geoffrey House"
-date: "July 17, 2017"
+date: "October 21, 2017"
 output: html_document
 ---
 
@@ -12,7 +12,7 @@ We'll start by making aggregate plots using the three PCA output files found in 
 These aggregate plots are made by averaging the *un-PC* value for each population pair across the three iterations to get the aggregated *un-PC* value for that population pair, which is then plotted (we'll see how to make individual, non-aggregated plots further below).
 
 ```{r, fig.width=4, fig.height=4, echo = TRUE, results='hide'}
-unPC::unPC(inputToProcess = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData", geogrCoords = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_NOT_DCTTransformed.txt", runAggregated = TRUE, populationPointNormalization = 5, savePlotsToPdf = FALSE)
+unPC::unPC(inputToProcess = "~/un-PC-master/exampleData", geogrCoords = "~/un-PC-master/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "~/un-PC-master/exampleData/populationCoordinates_NOT_DCTTransformed.txt", runAggregated = TRUE, populationPointNormalization = 5, savePlotsToPdf = FALSE)
 ```
 
 On the left is the plot with the most differentiated ellipses (population pairs with the highest *un-PC* scores) on top, and on the right is the plot with the least differentiated ellipses (population pairs with the lowest *un-PC* scores) on top. 
@@ -21,7 +21,7 @@ When we give the `inputToProcess` variable the path to a directory, like we've d
 
 **Note:** When using *un-PC* with PCA results from simulated data, like we're doing here, the input file name for each of the PCA result files needs to follow the format: XXX_XXXX_##.evec, where 'X' can be any character, '#' is the number of the simulation iteration, separated by underscores ('_') from the rest of the file name. For example, let's look at the names of the PCA output files that we used to make the *un-PC* visualizations above:
 ```{r, echo = TRUE,}
-Sys.glob("/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/*.evec")
+Sys.glob("~/un-PC-master/exampleData/*.evec")
 ```
 
 This is the format that is automatically output from the smartPCA PCA calculation program when using the files prepared through the *msLandscape* toolbox. If PCA results from other methods are used, the file names need to follow this convention to be parsed correctly.
@@ -35,7 +35,7 @@ Now let's look at some of the different options we can use with PCA results from
 If we want to change the color scheme, that is easy to do by supplying any valid RColorBrewer color scheme (for a list of valid color schemes type ```RColorBrewer::brewer.pal.info```.) Let's change it to the "RdYlBu" color scheme:
 
 ```{r, fig.width=4, fig.height=4, echo = TRUE, results='hide'}
-unPC::unPC(inputToProcess = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData", geogrCoords = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_NOT_DCTTransformed.txt", runAggregated = TRUE, populationPointNormalization = 5, colorBrewerPalette = "RdYlBu", savePlotsToPdf = FALSE)
+unPC::unPC(inputToProcess = "~/un-PC-master/exampleData", geogrCoords = "~/un-PC-master/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "~/un-PC-master/exampleData/populationCoordinates_NOT_DCTTransformed.txt", runAggregated = TRUE, populationPointNormalization = 5, colorBrewerPalette = "RdYlBu", savePlotsToPdf = FALSE)
 ```
 
 Notice that the plots are identical, but now the most differentiated ellipses are now dark orange instead of dark pink, and the least differentiated ellipses are now dark blue instead of dark green.
@@ -46,13 +46,13 @@ Notice that the plots are identical, but now the most differentiated ellipses ar
 The size of the points used to represent the populations are proportional to the number of individuals sampled from each population. To change the scaling factor used in plotting the population point size (the denominator used for the normalization), we change the value of the populationPointNormalization variable. For example, here we'll make the points smaller by increasing the normalization factor from five to 10 (i.e. dividing the number of individuals sampled per population by a larger number):
 
 ```{r, fig.width=4, fig.height=4, echo = TRUE, results='hide'}
-unPC::unPC(inputToProcess = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData", geogrCoords = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_NOT_DCTTransformed.txt", runAggregated = TRUE, populationPointNormalization = 10, savePlotsToPdf = FALSE)
+unPC::unPC(inputToProcess = "~/un-PC-master/exampleData", geogrCoords = "~/un-PC-master/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "~/un-PC-master/exampleData/populationCoordinates_NOT_DCTTransformed.txt", runAggregated = TRUE, populationPointNormalization = 10, savePlotsToPdf = FALSE)
 ```
 
 And here we'll make the points larger by decreasing the normalization factor from five to two:
 
 ```{r, fig.width=4, fig.height=4, echo = TRUE, results='hide'}
-unPC::unPC(inputToProcess = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData", geogrCoords = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_NOT_DCTTransformed.txt", runAggregated = TRUE, populationPointNormalization = 2, savePlotsToPdf = FALSE)
+unPC::unPC(inputToProcess = "~/un-PC-master/exampleData", geogrCoords = "~/un-PC-master/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "~/un-PC-master/exampleData/populationCoordinates_NOT_DCTTransformed.txt", runAggregated = TRUE, populationPointNormalization = 2, savePlotsToPdf = FALSE)
 ```
 
 
@@ -65,7 +65,7 @@ The variable savePlotsToPdf determines whether the plots are shown on the screen
 Generally when there are multiple PCA outputs from the same simulated scenario like we have with this example data, aggregating (i.e. averaging) all of the different PCA results into a single set of visualizations gives more robust visualizations of inferred migration patterns. However, if the goal is to highlight variability among the different PCA outputs instead, set the variable runAggregated to `FALSE` in order to produce a set of visualizations for each PCA output file in the `inputToProcess` directory. Let's look at that here:
 
 ```{r, fig.width=4, fig.height=4, echo = TRUE, results='hide'}
-unPC::unPC(inputToProcess = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData", geogrCoords = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_NOT_DCTTransformed.txt", runAggregated = FALSE, populationPointNormalization = 5, savePlotsToPdf = FALSE)
+unPC::unPC(inputToProcess = "~/un-PC-master/exampleData", geogrCoords = "~/un-PC-master/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "~/un-PC-master/exampleData/populationCoordinates_NOT_DCTTransformed.txt", runAggregated = FALSE, populationPointNormalization = 5, savePlotsToPdf = FALSE)
 ```
 
 The top set of visualizations are from the first PCA output, the middle ones are from the second output, and the bottom ones are from the third output. By comparing some of the individual ellipses from these visualizations, we can see that the aggregate (average) visualizations mute some of the individual variation that occurs among individual PCA output.
@@ -75,7 +75,7 @@ The top set of visualizations are from the first PCA output, the middle ones are
 For this, we're going to switch to PCA output files from simulated data that represents constant migration across the landscape (from Figure 3 in the manuscript). First let's see what the *un-PC* results for these PCA results look like when we use the same settings that we initially used in this tutorial (to make this run faster, we're using PCA results from three independent simulation iterations here - i.e. three .evec files):
 
 ```{r, fig.width=4, fig.height=4, echo = TRUE, results='hide'}
-unPC::unPC(inputToProcess = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/constantMigration/", geogrCoords = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_NOT_DCTTransformed.txt", runAggregated = TRUE, populationPointNormalization = 5, savePlotsToPdf = FALSE)
+unPC::unPC(inputToProcess = "~/un-PC-master/exampleData/constantMigration/", geogrCoords = "~/un-PC-master/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "~/un-PC-master/exampleData/populationCoordinates_NOT_DCTTransformed.txt", runAggregated = TRUE, populationPointNormalization = 5, savePlotsToPdf = FALSE)
 ```
 
 *un-PC* uses the geographic coordinates for the sampled populations twice in building its visualizations: once for calculating the *un-PC* value between each pair of populations, and once for plotting the location of each population. *Un-PC* requires the user specify the `geogrCoords` variable to provide the population coordinates, and by default *un-PC* uses these coordinates both for calculating the *un-PC* values and for the plotting. 
@@ -83,7 +83,7 @@ unPC::unPC(inputToProcess = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleD
 Let's take a look at the hexagonal grid configuration of the sampled populations as we simulated them:
 
 ```{r, fig.width=4, fig.height=4, echo = TRUE, results='hide'}
-popnCoords <- read.table("/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_NOT_DCTTransformed.txt", sep = "", header = FALSE)
+popnCoords <- read.table("~/un-PC-master/exampleData/populationCoordinates_NOT_DCTTransformed.txt", sep = "", header = FALSE)
 plot(popnCoords[,2],popnCoords[,1], xlab = "X values", ylab = "Y values")
 ```
 
@@ -92,7 +92,7 @@ We can see that this is the same configuration and even spacing of populations a
 Because this data was generated by simulating constant migration across the landscape, ideally the population locations based on genetic differences in the PCA biplot (PC1 plotted against PC2) would be quite similar to the simulated population locations. Let's see what the aggregate PCA biplot (averaged over the three different sets of PCA results that we're using) looks like:
 
 ```{r, fig.width=4, fig.height=4, echo = TRUE, results='hide'}
-unPC_intermediateOutput <- readRDS("/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/constantMigration/unPC_visualization_pairwiseDistCalc_unPC.rds")
+unPC_intermediateOutput <- readRDS("~/un-PC-master/exampleData/constantMigration/unPC_visualization_pairwiseDistCalc_unPC.rds")
 plot(unPC_intermediateOutput$PC1_1, unPC_intermediateOutput$PC2_1, xlab = "PC 1", ylab = "PC 2")
 ```
 
@@ -101,7 +101,7 @@ We can see that the configuration of populations near the middle are fairly simi
 Let's see what these expected population locations look like:
 
 ```{r, fig.width=4, fig.height=4, echo = TRUE, results='hide'}
-popnCoords <- read.table("/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_DCTTransformed.txt", sep = "", header = FALSE)
+popnCoords <- read.table("~/un-PC-master/exampleData/populationCoordinates_DCTTransformed.txt", sep = "", header = FALSE)
 plot(popnCoords[,2],popnCoords[,1], xlab = "X values", ylab = "Y values")
 ```
 
@@ -114,7 +114,7 @@ This is where the option for *un-PC* to use one set of population coordinates fo
 Let's explore how these work together by using only the expected population locations for both the *un-PC* value calculation and creating the visualizations. We can do this by omitting the `geogrCoordsForPlotting` variable. This makes *un-PC* use the required variable `geogrCoords` to both calculate the *un-PC* values and to generate the visualizations using the expected population locations:
 
 ```{r, fig.width=4, fig.height=4, echo = TRUE, results='hide'}
-unPC::unPC(inputToProcess = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/constantMigration/", geogrCoords = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_DCTTransformed.txt",  runAggregated = TRUE, populationPointNormalization = 5, savePlotsToPdf = FALSE)
+unPC::unPC(inputToProcess = "~/un-PC-master/exampleData/constantMigration/", geogrCoords = "~/un-PC-master/exampleData/populationCoordinates_DCTTransformed.txt",  runAggregated = TRUE, populationPointNormalization = 5, savePlotsToPdf = FALSE)
 ```
 
 OK, so using these expected population locations, the ellipses are the same colors as we had above, but some are 'pinched' or 'stretched' more than in the visualizations we made above because we also used the expected population locations to build the visualizations.
@@ -122,7 +122,7 @@ OK, so using these expected population locations, the ellipses are the same colo
 Now let's do the same thing with the raw (non-transformed) population coordinates as we simulated them, using these coordinates for both the *un-PC* value calculations and the plotting in the visualizations:
 
 ```{r, fig.width=4, fig.height=4, echo = TRUE, results='hide'}
-unPC::unPC(inputToProcess = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/constantMigration/", geogrCoords = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_NOT_DCTTransformed.txt",  runAggregated = TRUE, populationPointNormalization = 5, savePlotsToPdf = FALSE)
+unPC::unPC(inputToProcess = "~/un-PC-master/exampleData/constantMigration/", geogrCoords = "~/un-PC-master/exampleData/populationCoordinates_NOT_DCTTransformed.txt",  runAggregated = TRUE, populationPointNormalization = 5, savePlotsToPdf = FALSE)
 ```
 
 Here the population locations in the visualizations are as we expect, but the colors of the ellipses are different because these raw population locations were not used to calculate the *un-PC* values and therefore some of the characteristic PCA distortion that we saw above is affecting their values (especially in the center and the edges of the visualizations).
@@ -130,5 +130,5 @@ Here the population locations in the visualizations are as we expect, but the co
 So when we use the expected population locations to calculate the *un-PC* values, and then use the raw locations for the visualizations, we get the same visualizations that we originally started with and that remove many of the artefacts created by the PCA distortion:
 
 ```{r, fig.width=4, fig.height=4, echo = TRUE, results='hide'}
-unPC::unPC(inputToProcess = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/constantMigration/", geogrCoords = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "/Volumes/shuttleDrive/Box Sync/R_code/unPC/exampleData/populationCoordinates_NOT_DCTTransformed.txt", runAggregated = TRUE, populationPointNormalization = 5, savePlotsToPdf = FALSE)
+unPC::unPC(inputToProcess = "~/un-PC-master/exampleData/constantMigration/", geogrCoords = "~/un-PC-master/exampleData/populationCoordinates_DCTTransformed.txt", geogrCoordsForPlotting = "~/un-PC-master/exampleData/populationCoordinates_NOT_DCTTransformed.txt", runAggregated = TRUE, populationPointNormalization = 5, savePlotsToPdf = FALSE)
 ```
